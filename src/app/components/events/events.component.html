@@ -1,0 +1,87 @@
+<div>
+    <div class="d-flex justify-content-between align-items-center">
+        <h3 class="form-group form-inline">
+            Event List
+        </h3>
+        <button class="btn btn-primary" (click)="createModal(content)">Add</button>
+    </div>
+
+    <table class="table table-striped text-center">
+        <thead>
+            <tr>
+                <th scope="col">Start date</th>
+                <th scope="col">End date</th>
+                <th scope="col">Type</th>
+                <th scope="col">Description</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of selected.events; index as i">
+                <td>
+                    {{item.start | date}}
+                </td>
+                <td>
+                    {{item.end | date}}
+                </td>
+                <td>
+                    {{item.type}}
+                </td>
+                <td>
+                    {{item.description}}
+                </td>
+                <td class="d-flex align-items-center justify-content-center">
+                    <button class="btn btn-warning p-2 action" (click)="editModal(content,item, i)">
+                        <fa-icon [icon]="edit"></fa-icon>
+                    </button>
+                    <button class="btn btn-danger p-2" (click)="confirmDelete(item)">
+                        <fa-icon [icon]="trash"></fa-icon>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+            {{isCreate ? 'Create' : 'Update'}} Event
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="form" autocomplete="off">
+            <div class="form-group">
+                <label for="start">Start date</label>
+                <input type="text" class="form-control" id="start" formControlName="start" ngbDatepicker
+                    #start="ngbDatepicker" (click)="start.toggle()">
+            </div>
+            <div class="form-group">
+                <label for="end">End Date</label>
+                <input type="text" class="form-control" id="end" formControlName="end" ngbDatepicker
+                    #end="ngbDatepicker" (click)="end.toggle()">
+            </div>
+            <div class="form-group">
+                <label for="type">Type</label>
+                <select class="form-control" id="type" formControlName="type">
+                    <option value="">Select a type</option>
+                    <option value="week-off">Week off</option>
+                    <option value="seminar">Seminar</option>
+                    <option value="project">Project</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" id="description" formControlName="description">
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="modal.close()"
+            [disabled]="form.invalid">Save</button>
+    </div>
+</ng-template>
